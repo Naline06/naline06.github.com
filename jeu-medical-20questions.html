@@ -1,0 +1,106 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mini-Jeu Médical</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 700px; margin: auto; }
+    h1 { text-align: center; }
+    .question { margin-top: 20px; }
+    .result { font-weight: bold; margin-top: 10px; }
+    .btns button { margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Mini-Jeu Médical : Vrai ou Faux</h1>
+  <div id="quiz"></div>
+  <p id="score" class="result"></p>
+  <button onclick="restartQuiz()">Recommencer</button>
+
+  <script>
+    const allQuestions = [
+      { q: "Le cœur a quatre cavités.", a: true },
+      { q: "Les reins filtrent l’oxygène du sang.", a: false },
+      { q: "Le foie produit la bile.", a: true },
+      { q: "L’ADN est situé dans le noyau des cellules.", a: true },
+      { q: "La trachée permet à l’air d’atteindre les poumons.", a: true },
+      { q: "Les os du crâne sont mobiles.", a: false },
+      { q: "Le pancréas produit de l’insuline.", a: true },
+      { q: "Les globules blancs transportent l’oxygène.", a: false },
+      { q: "Le cerveau contrôle le système nerveux central.", a: true },
+      { q: "La peau est l’organe le plus lourd du corps humain.", a: true },
+      { q: "Les veines transportent du sang riche en oxygène.", a: false },
+      { q: "Le sang circule uniquement dans les artères.", a: false },
+      { q: "Le diabète est causé par un excès de globules rouges.", a: false },
+      { q: "La moelle épinière fait partie du système nerveux.", a: true },
+      { q: "Le muscle cardiaque est volontaire.", a: false },
+      { q: "L’estomac est responsable de la digestion des protéines.", a: true },
+      { q: "La pupille se dilate en plein jour.", a: false },
+      { q: "Les poumons sont impliqués dans l’excrétion de CO₂.", a: true },
+      { q: "Le vaccin déclenche une réponse immunitaire.", a: true },
+      { q: "L’appendice est essentiel à la digestion.", a: false },
+      { q: "La fièvre est toujours un signe de cancer.", a: false },
+      { q: "Le cerveau utilise environ 20% de l’énergie corporelle.", a: true },
+      { q: "Un virus est plus gros qu’une bactérie.", a: false },
+      { q: "La tension artérielle est mesurée en mg.", a: false },
+      { q: "Les muscles lisses sont présents dans les intestins.", a: true }
+    ];
+
+    let score = 0;
+    let current = 0;
+    let questions = [];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function showQuestion() {
+      if (current >= questions.length) {
+        document.getElementById("quiz").innerHTML = "<p>Jeu terminé !</p>";
+        document.getElementById("score").textContent = "Votre score : " + score + " / " + questions.length;
+        return;
+      }
+
+      const q = questions[current];
+      document.getElementById("quiz").innerHTML = `
+        <div class="question"><strong>Question ${current + 1} :</strong> ${q.q}</div>
+        <div class="btns">
+          <button onclick="answer(true)">Vrai</button>
+          <button onclick="answer(false)">Faux</button>
+        </div>
+        <div id="feedback" class="result"></div>
+      `;
+    }
+
+    function answer(val) {
+      const isCorrect = questions[current].a === val;
+      if (isCorrect) {
+        score++;
+        document.getElementById("feedback").textContent = "Bonne réponse ✔️";
+      } else {
+        document.getElementById("feedback").textContent = "Mauvaise réponse ❌";
+      }
+      current++;
+      setTimeout(showQuestion, 1000);
+    }
+
+    function restartQuiz() {
+      score = 0;
+      current = 0;
+      questions = [...allQuestions];
+      shuffle(questions);
+      questions = questions.slice(0, 20); // 20 questions aléatoires
+      document.getElementById("score").textContent = "";
+      showQuestion();
+    }
+
+    restartQuiz();
+  </script>
+</body>
+</html>
